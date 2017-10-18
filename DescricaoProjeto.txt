@@ -1,0 +1,40 @@
+**************************************************
+
+1) Entrar-Abrir na Garagem
+
+- Acionar servoMotor para ABRIR o Portao
+- ACENDER a Luz Automatico
+- Entrar com carro
+
+**************************************************
+
+2) Entrar-Fechar na Garagem
+
+- Acionar servoMotor para FECHAR o Portao
+*Não apaga a Luz
+- Clicar no Botao para APAGAR a Luz
+
+**************************************************
+
+3) Sair-Abrir da Garagem
+
+- Clicar no Botao para ACENDER a Luz
+- Acionar servoMotor para ABRIR o Portao
+- Sair com carro
+
+**************************************************
+
+4) Sair-Fechar da Garagem
+
+- Acionar servoMotor para FECHAR o Portao
+- APAGAR a Luz Automatico
+
+**************************************************
+
+5) Botão Ligar/Desligar Luz Manual
+
+**************************************************
+
+6) MQTT 
+
+**************************************************
