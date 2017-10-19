@@ -64,46 +64,46 @@ void loop ()
   }
 }
 
-//////////////////////////////////////////////
-
-//Função ABRIR Portao
-void abrirPortao ()
-{
-  Serial.print(motor.read());
-  Serial.print("\n");
-
-  for (i = 180; i >= 90; i--)
-  {
-    motor.write(i);
-    delay(10);
-  }
-}
-
-//Função FECHAR Portao
-void fecharPortao ()
-{
-  Serial.print(motor.read());
-  Serial.print("\n");
-
-  for (i = 90; i >= 180; i--)
-  {
-    motor.write(i);
-    delay(10);
-  }
-}
-
-//Função ACENDER Luz
-void acenderLed ()
-{
-  digitalWrite(led, HIGH);
-  delay(500);
-}
-
-//Função APAGAR Luz
-void apagarLed ()
-{
-  digitalWrite(led, LOW);
-  delay(500);
-}
-
-//////////////////////////////////////////////
+////////////////////////////////////////////////
+//
+////Função ABRIR Portao
+//void abrirPortao ()
+//{
+//  Serial.print(motor.read());
+//  Serial.print("\n");
+//
+//  for (i = 180; i >= 90; i--)
+//  {
+//    motor.write(i);
+//    delay(10);
+//  }
+//}
+//
+////Função FECHAR Portao
+//void fecharPortao ()
+//{
+//  Serial.print(motor.read());
+//  Serial.print("\n");
+//
+//  for (i = 90; i >= 180; i--)
+//  {
+//    motor.write(i);
+//    delay(10);
+//  }
+//}
+//
+////Função ACENDER Luz
+//void acenderLed ()
+//{
+//  digitalWrite(led, HIGH);
+//  delay(500);
+//}
+//
+////Função APAGAR Luz
+//void apagarLed ()
+//{
+//  digitalWrite(led, LOW);
+//  delay(500);
+//}
+//
+////////////////////////////////////////////////
