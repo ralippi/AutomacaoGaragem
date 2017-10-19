@@ -146,6 +146,7 @@ void abrirPortao () {
       delay(10);
     }
   }
+  // client.publish("portao", "Portão Aberto");
 }
 
 //Função FECHAR Portao
@@ -156,23 +157,31 @@ void fecharPortao () {
       delay(10);
     }
   }
+  //  client.publish("portao", "Portão Fechado");
 }
 
 //Função ACENDER Luz
 void acenderLed () {
   digitalWrite(led, HIGH);
   delay(500);
+  client.publish("portao", 1);
 }
 
 //Função APAGAR Luz
 void apagarLed () {
   digitalWrite(led, LOW);
   delay(500);
+  // client.publish("portao", "Led Apagado");
 }
 
 void  ligarDesligarLed() {
   digitalWrite(led, !digitalRead(led));
   delay(500);
+  //  if (digitalRead(led) == HIGH) {
+  //    client.publish("portao", "Led Aceso");
+  //  } else {
+  //    client.publish("portao", "Led Apagado");
+  //  }
 }
 
 //////////////////////////////////////////////
