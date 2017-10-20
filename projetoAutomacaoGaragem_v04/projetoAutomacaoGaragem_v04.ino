@@ -4,13 +4,10 @@
 #include <utility/logging.h>
 #include <PubSubClient.h>
 
-
+Servo motor;
 const int botaoMotor = 9;
 int estadoBotaoMotor = 0;
 const int led = 4;
-const int ledVermelho = 6;
-const int ledVerde = 5;
-const int ledAmarelo = 3;
 const int botaoLed = 7;
 int estadoBotaoLed = 0;
 int i;
@@ -20,7 +17,7 @@ byte mac[] = { 0xDE, 0xED, 0xBA, 0xFE, 0xF1, 0x55 };
 char* server = "m10.cloudmqtt.com";
 // Valor da porta do servidor MQTT
 int port = 14882;
-Servo motor;
+
 EthernetClient ethClient;
 
 
@@ -32,8 +29,9 @@ void whenMessageReceived(char* topic, byte* payload, unsigned int length) {
   // Converter em tipo String para conveniência
   String msg = String(payloadAsChar);
   Serial.print("Topic received: "); Serial.println(topic);
+  //  Serial.print("Message: "); Serial.println(msg);
 
-  // Dentro do whenMessageReceived (callback) da biblioteca MQTT,
+  // Dentro do callback da biblioteca MQTT,
   // devemos usar Serial.flush() para garantir que as mensagens serão enviadas
   Serial.flush();
 
@@ -62,13 +60,10 @@ void whenMessageReceived(char* topic, byte* payload, unsigned int length) {
       apagarLed();
       break;
     case 5:
-      acenderLed();
-      break;
-    case 6:
-      apagarLed();
+      ligarDesligarLed();
       break;
     default:
-      Serial.println("Option not available");
+      Serial.println("Fail!");
       break;
   }
 }
@@ -87,15 +82,10 @@ void setup() {
 
   pinMode(led, OUTPUT);
   pinMode(botaoLed, INPUT);
-  pinMode(ledVermelho, OUTPUT);
-  pinMode(ledVerde, OUTPUT);
-  pinMode(ledAmarelo, OUTPUT);
 
   Serial.begin(9600);
   Serial.println("Connecting...");
-
   while (!Serial) {}
-
   if (!Ethernet.begin(mac)) {
     Serial.println("DHCP Failed");
   } else {
@@ -125,15 +115,12 @@ void loop() {
   estadoBotaoMotor = digitalRead(botaoMotor);
   estadoBotaoLed = digitalRead(botaoLed);
 
-  //TESTE da posicao do servo motor
+  //Teste da posicao do servo motor
   //Serial.print(motor.read());
   //Serial.print("\n");
 
   if (estadoBotaoLed == HIGH) {
     digitalWrite(led, !digitalRead(led));
-    digitalWrite(ledVermelho, !digitalRead(ledVermelho));
-    digitalWrite(ledVerde, !digitalRead(ledVerde));
-    digitalWrite(ledAmarelo, !digitalRead(ledAmarelo));
     delay(500);
   }
 
@@ -149,20 +136,7 @@ void loop() {
   }
 }
 
-
 //////////////////////////////////////////////
-//FUNÇÕES
-//////////////////////////////////////////////
-
-////FUNÇÃO Para mandar msg ao MQTT indicando que o LED esta Aceso
-//void msgLedAcesso() {
-//  client.publish("portao", 5);
-//}
-//
-////FUNÇÃO Para mandar msg ao MQTT indicando que o LED esta Apagado
-//void msgLedApagado() {
-//  client.publish("portao", "6");
-//}
 
 //Função ABRIR Portao
 void abrirPortao () {
@@ -172,6 +146,7 @@ void abrirPortao () {
       delay(10);
     }
   }
+  // client.publish("portao", "Portão Aberto");
 }
 
 //Função FECHAR Portao
@@ -182,30 +157,31 @@ void fecharPortao () {
       delay(10);
     }
   }
+  //  client.publish("portao", "Portão Fechado");
 }
 
 //Função ACENDER Luz
 void acenderLed () {
   digitalWrite(led, HIGH);
   delay(500);
-//  msgLedAcesso();
+//  client.publish("portao", 1);
 }
 
 //Função APAGAR Luz
 void apagarLed () {
   digitalWrite(led, LOW);
   delay(500);
-//  msgLedApagado();
+  // client.publish("portao", "Led Apagado");
 }
 
 void  ligarDesligarLed() {
   digitalWrite(led, !digitalRead(led));
   delay(500);
-  //    if (digitalRead(led) == HIGH) {
-  //      client.publish("portao", "Led Aceso");
-  //    } else {
-  //      client.publish("portao", "Led Apagado");
-  //    }
+  //  if (digitalRead(led) == HIGH) {
+  //    client.publish("portao", "Led Aceso");
+  //  } else {
+  //    client.publish("portao", "Led Apagado");
+  //  }
 }
 
 //////////////////////////////////////////////

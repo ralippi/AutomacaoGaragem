@@ -8,8 +8,8 @@
 const int botaoMotor = 9;
 int estadoBotaoMotor = 0;
 const int led = 4;
-const int ledVermelho = 6;
-const int ledVerde = 5;
+const int ledVermelho = 5;
+const int ledVerde = 6;
 const int ledAmarelo = 3;
 const int botaoLed = 7;
 int estadoBotaoLed = 0;
@@ -45,30 +45,44 @@ void whenMessageReceived(char* topic, byte* payload, unsigned int length) {
   switch (msgComoNumero) {
     //Entrar-Abrir na Garagem
     case 1:
+      digitalWrite(ledAmarelo, HIGH);
       abrirPortao();
       acenderLed();
+      digitalWrite(ledAmarelo, LOW);
       break;
     //Entrar-Fechar na Garagem
     case 2:
+      digitalWrite(ledAmarelo, HIGH);
       fecharPortao();
+      digitalWrite(ledAmarelo, LOW);
       break;
     //Sair-Abrir da Garagem
     case 3:
+      digitalWrite(ledAmarelo, HIGH);
       abrirPortao();
+      digitalWrite(ledAmarelo, LOW);
       break;
     //Sair-Fechar da Garagem
     case 4:
+      digitalWrite(ledAmarelo, HIGH);
       fecharPortao();
       apagarLed();
+      digitalWrite(ledAmarelo, LOW);
       break;
     case 5:
+      digitalWrite(ledAmarelo, HIGH);
       acenderLed();
+      digitalWrite(ledAmarelo, LOW);
       break;
     case 6:
+      digitalWrite(ledAmarelo, HIGH);
       apagarLed();
+      digitalWrite(ledAmarelo, LOW);
       break;
     default:
+      digitalWrite(ledAmarelo, HIGH);
       Serial.println("Option not available");
+      digitalWrite(ledAmarelo, LOW);
       break;
   }
 }
@@ -93,26 +107,42 @@ void setup() {
 
   Serial.begin(9600);
   Serial.println("Connecting...");
-
+  digitalWrite(ledAmarelo, HIGH);
+  
   while (!Serial) {}
 
   if (!Ethernet.begin(mac)) {
     Serial.println("DHCP Failed");
+    digitalWrite(ledVerde, LOW);
+    digitalWrite(ledVermelho, HIGH);
+    digitalWrite(ledAmarelo, LOW);
   } else {
     Serial.println(Ethernet.localIP());
+    digitalWrite(ledVerde, HIGH);
+    digitalWrite(ledVermelho, LOW);
+    digitalWrite(ledAmarelo, LOW);
   }
 
   // Faz a conexão no cloud com nome do dispositivo, usuário e senha respectivamente
-  if (client.connect("celular", "iot", "iot")) {
+  if (client.connect("celular", "iot2", "iot2")) {
     Serial.println("Connected");
     // Envia uma mensagem para o cloud no topic portao
-    client.publish("portao", "hello world");
-    Serial.println("portao sent");
+    client.publish("portao2", "hello world");
+    Serial.println("portao2 sent");
+
+    //Feedback Luz que a conexão com o servidor esta OK
+    digitalWrite(ledVerde, HIGH);
+    digitalWrite(ledVermelho, LOW);
+    digitalWrite(ledAmarelo, LOW);
     // Conecta no topic para receber mensagens
-    client.subscribe("portao");
-    Serial.println("conectado portao");
+    client.subscribe("portao2");
+    Serial.println("conectado portao2");
   } else {
     Serial.println("Failed to connect to MQTT server");
+    //Feedback Luz que a conexão com o servidor esta OK
+    digitalWrite(ledVermelho, HIGH);
+    digitalWrite(ledVerde, LOW);
+    digitalWrite(ledAmarelo, LOW);
   }
 }
 
@@ -121,7 +151,7 @@ void loop() {
   // A biblioteca PubSubClient precisa que este método seja chamado em cada iteração de `loop()`
   // para manter a conexão MQTT e processar mensagens recebidas (via a função callback)
   client.loop();
-
+  
   estadoBotaoMotor = digitalRead(botaoMotor);
   estadoBotaoLed = digitalRead(botaoLed);
 
@@ -131,9 +161,6 @@ void loop() {
 
   if (estadoBotaoLed == HIGH) {
     digitalWrite(led, !digitalRead(led));
-    digitalWrite(ledVermelho, !digitalRead(ledVermelho));
-    digitalWrite(ledVerde, !digitalRead(ledVerde));
-    digitalWrite(ledAmarelo, !digitalRead(ledAmarelo));
     delay(500);
   }
 
@@ -188,14 +215,14 @@ void fecharPortao () {
 void acenderLed () {
   digitalWrite(led, HIGH);
   delay(500);
-//  msgLedAcesso();
+  //  msgLedAcesso();
 }
 
 //Função APAGAR Luz
 void apagarLed () {
   digitalWrite(led, LOW);
   delay(500);
-//  msgLedApagado();
+  //  msgLedApagado();
 }
 
 void  ligarDesligarLed() {
